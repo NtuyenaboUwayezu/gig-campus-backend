@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,20 +63,22 @@ public class GigController {
     @GetMapping("/all")
     public ResponseEntity<List<Gig>> all() {
 
-        return ResponseEntity.ok(service.all());
+        return ResponseEntity.ok(
+                service.all());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> one(
             @PathVariable UUID id) {
 
-        Optional<Gig> found = service.one(id);
+        Optional<Gig> found =
+                service.one(id);
 
         if (found.isEmpty()) {
-
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("The gig with that id does not exist");
+                    .body(
+                    "The gig with that id does not exist");
         }
 
         return ResponseEntity.ok(
@@ -138,8 +144,7 @@ public class GigController {
 
         LocalDate endDate = LocalDate.parse(end);
 
-        return ResponseEntity.ok(
-                service.between(startDate, endDate));
+        return ResponseEntity.ok(service.between(startDate, endDate));
     }
 
     @PatchMapping("/{id}/status")
@@ -147,7 +152,8 @@ public class GigController {
             @PathVariable UUID id,
             @RequestParam GigStatus status) {
 
-        String result = service.changeStatus(id, status);
+        String result =
+                service.changeStatus(id, status);
 
         if (result.equals("The gig with that id does not exist")) {
 
@@ -182,5 +188,31 @@ public class GigController {
 
         return ResponseEntity.ok(
                 service.cancelDay(studentId, gigDate));
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Gig>> page(
+            @RequestParam(defaultValue = "0")
+            int page,
+            @RequestParam(defaultValue = "5")
+            int size,
+            @RequestParam(defaultValue = "gigDate,desc")
+            String sort) {
+
+        String[] parts = sort.split(",");
+
+        String field = parts[0];
+
+        Sort.Direction direction = Sort.Direction.DESC;
+
+        if (parts.length > 1
+                && parts[1].equalsIgnoreCase("asc")) {
+
+            direction = Sort.Direction.ASC;
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
+
+        return ResponseEntity.ok(service.page(pageable));
     }
 }

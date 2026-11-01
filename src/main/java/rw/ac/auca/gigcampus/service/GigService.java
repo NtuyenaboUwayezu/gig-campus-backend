@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,8 @@ public class GigService {
     private final StudentRepository students;
     private final RatingRepository ratings;
 
-    public GigService(GigRepository gigs, EmployerRepository employers, StudentRepository students, RatingRepository ratings) {
+    public GigService(GigRepository gigs, EmployerRepository employers, StudentRepository students,
+            RatingRepository ratings) {
 
         this.gigs = gigs;
         this.employers = employers;
@@ -164,27 +167,21 @@ public class GigService {
         }
 
         Gig gig = found.get();
-
         GigStatus currentStatus = gig.getStatus();
 
         boolean allowed = false;
 
         if (currentStatus == GigStatus.OPEN) {
-
-            allowed =
-                    newStatus == GigStatus.ASSIGNED
+            allowed = newStatus == GigStatus.ASSIGNED
                     || newStatus == GigStatus.WITHDRAWN;
         }
 
         if (currentStatus == GigStatus.ASSIGNED) {
-
-            allowed =
-                    newStatus == GigStatus.DELIVERED
+            allowed = newStatus == GigStatus.DELIVERED
                     || newStatus == GigStatus.WITHDRAWN;
         }
 
         if (!allowed) {
-
             return "Cannot change status from "
                     + currentStatus
                     + " to "
@@ -192,7 +189,6 @@ public class GigService {
         }
 
         gig.setStatus(newStatus);
-
         gigs.save(gig);
 
         return "Gig status updated successfully";
@@ -204,21 +200,20 @@ public class GigService {
     }
 
     @Transactional
-    public String cancelDay(
-            UUID studentId,
-            LocalDate date) {
+    public String cancelDay(UUID studentId, LocalDate date) {
 
         int numberCancelled =
-                gigs.cancelStudentDay(
-                        studentId,
-                        date);
+                gigs.cancelStudentDay(studentId, date);
 
-        return numberCancelled
-                + " gigs cancelled";
+        return numberCancelled + " gigs cancelled";
     }
 
-    private Student resolveStudent(
-            Student input) {
+    public Page<Gig> page(Pageable pageable) {
+
+        return gigs.findAll(pageable);
+    }
+
+    private Student resolveStudent(Student input) {
 
         if (input == null
                 || input.getId() == null) {
@@ -231,8 +226,7 @@ public class GigService {
                 .orElse(null);
     }
 
-    private Employer resolveEmployer(
-            Employer input) {
+    private Employer resolveEmployer(Employer input) {
 
         if (input == null
                 || input.getId() == null) {

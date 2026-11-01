@@ -17,9 +17,15 @@ public interface GigRepository extends JpaRepository<Gig, UUID> {
 
     List<Gig> findByStatusOrderByGigDateAsc(GigStatus status);
 
-    List<Gig> findByGigDateBetweenOrderByGigDateAsc(LocalDate start, LocalDate end);
+    List<Gig> findByGigDateBetweenOrderByGigDateAsc(LocalDate start,
+            LocalDate end);
 
-    boolean existsByStudent_IdAndGigDateAndStatusNot(UUID studentId, LocalDate gigDate, GigStatus status);
+    boolean existsByStudent_IdAndGigDateAndStatusNot(UUID studentId, LocalDate gigDate,
+            GigStatus status);
+
+    long countByStatus(GigStatus status);
+
+    long countByGigDate(LocalDate gigDate);
 
     @Query("""
         SELECT g.status, COUNT(g)
