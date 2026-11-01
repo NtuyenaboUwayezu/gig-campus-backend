@@ -83,4 +83,12 @@ public class WorkspaceController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/free")
+public ResponseEntity<?> freeWorkspaces() {
+
+    return ResponseEntity.ok(
+            service.freeWorkspaces());
+}
+
 }

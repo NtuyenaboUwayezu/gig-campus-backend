@@ -63,4 +63,14 @@ public class StudentController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/by-skill")
+public ResponseEntity<?> bySkill(
+        @RequestParam String name) {
+
+    return ResponseEntity.ok(
+            service.bySkill(name));
+}
+
+
 }

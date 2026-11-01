@@ -2,6 +2,7 @@ package rw.ac.auca.gigcampus.controller;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +57,7 @@ public class EmployerController {
 
         String result = service.update(id, employer);
 
-        if (result.equals(
-                "The employer with that id does not exist")) {
+        if (result.equals("The employer with that id does not exist")) {
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -73,8 +73,7 @@ public class EmployerController {
 
         String result = service.delete(id);
 
-        if (result.equals(
-                "The employer with that id does not exist")) {
+        if (result.equals("The employer with that id does not exist")) {
 
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -90,6 +89,22 @@ public ResponseEntity<?> byOrganization(
 
     return ResponseEntity.ok(
             service.byOrganization(organization));
+}
+
+@GetMapping("/of-student/{studentId}")
+public ResponseEntity<?> ofStudent(
+        @PathVariable UUID studentId) {
+
+    List<Employer> result =
+            service.ofStudent(studentId);
+
+    if (result == null) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("The student with that id does not exist");
+    }
+
+    return ResponseEntity.ok(result);
 }
 
 }

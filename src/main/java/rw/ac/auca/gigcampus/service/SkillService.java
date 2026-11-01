@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import rw.ac.auca.gigcampus.domain.Skill;
+import rw.ac.auca.gigcampus.domain.Student;
 import rw.ac.auca.gigcampus.repository.SkillRepository;
 
 @Service
@@ -66,4 +67,9 @@ public class SkillService {
 
         return "Skill deleted successfully";
     }
+
+public List<Skill> unusedSkills() {
+    return skills.findUnusedSkills();
+}
+
 }

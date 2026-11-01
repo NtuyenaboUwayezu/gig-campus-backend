@@ -114,21 +114,39 @@
       "response": []
     },
     {
-      "name": "http://localhost:8080/api/workspaces/update/0e9f8e21-a3d7-43a4-8feb-4337abd05698",
+      "name": "C1",
       "request": {
-        "method": "PUT",
+        "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"workspaceNumber\": 99,\r\n  \"name\": \"Temporary Workspace Updated\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
         "url": {
-          "raw": "http://localhost:8080/api/workspaces/update/0e9f8e21-a3d7-43a4-8feb-4337abd05698",
+          "raw": "http://localhost:8080/api/students/by-skill?name=photo",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "students",
+            "by-skill"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "photo"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/workspaces/free",
           "protocol": "http",
           "host": [
             "localhost"
@@ -137,8 +155,50 @@
           "path": [
             "api",
             "workspaces",
-            "update",
-            "0e9f8e21-a3d7-43a4-8feb-4337abd05698"
+            "free"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C3",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/skills/unused",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "skills",
+            "unused"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "C4",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/employers/of-student/7c60cbda-8967-420c-92da-cf420e64ef7c",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "employers",
+            "of-student",
+            "7c60cbda-8967-420c-92da-cf420e64ef7c"
           ]
         }
       },

@@ -93,4 +93,9 @@ public Optional<Student> one(UUID id) {
         }
         return selected;
 }
+
+public List<Student> bySkill(String name) {
+    return students.findBySkillName(name);
+}
+
 }

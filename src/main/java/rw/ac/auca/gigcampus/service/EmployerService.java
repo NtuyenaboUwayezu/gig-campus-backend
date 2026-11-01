@@ -9,15 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import rw.ac.auca.gigcampus.domain.Employer;
 import rw.ac.auca.gigcampus.repository.EmployerRepository;
+import rw.ac.auca.gigcampus.repository.StudentRepository;
 
 @Service
 public class EmployerService {
 
     private final EmployerRepository employers;
 
-    public EmployerService(EmployerRepository employers) {
-        this.employers = employers;
-    }
+    private final StudentRepository students;
+
+  public EmployerService(EmployerRepository employers, StudentRepository students) {
+
+    this.employers = employers;
+    this.students = students;
+}
 
     public List<Employer> all() {
         return employers.findAll();
@@ -75,4 +80,14 @@ public class EmployerService {
             .findByOrganizationIgnoreCaseOrderByLastNameAsc(
                     organization);
 }
+
+public List<Employer> ofStudent(UUID studentId) {
+
+    if (!students.existsById(studentId)) {
+        return null;
+    }
+
+    return employers.findEmployersOfStudent(studentId);
+}
+
 }

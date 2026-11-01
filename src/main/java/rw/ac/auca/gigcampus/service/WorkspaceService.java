@@ -48,4 +48,9 @@ public String update(UUID id, Workspace input) {
         workspaces.delete(found.get());
         return "Workspace deleted successfully";
 }
+
+public List<Workspace> freeWorkspaces() {
+    return workspaces.findFreeWorkspaces();
+}
+
 }
