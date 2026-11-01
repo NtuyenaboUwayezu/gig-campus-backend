@@ -81,16 +81,27 @@ public ResponseEntity<String> save(
         return ResponseEntity.ok(result);
     }
 @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(
-            @PathVariable UUID id) {
-        String result = service.delete(id);
-        if (result.equals("The gig with that id does not exist")) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(result);
-        }
-        return ResponseEntity.ok(result);
+public ResponseEntity<String> delete(
+        @PathVariable UUID id) {
+
+    String result = service.delete(id);
+
+    if (result.equals("The gig with that id does not exist")) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(result);
     }
+
+    if (result.equals("That gig has ratings, delete them first")) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(result);
+    }
+
+    return ResponseEntity.ok(result);
+}
 
     @GetMapping("/by-status")
 public ResponseEntity<?> byStatus(

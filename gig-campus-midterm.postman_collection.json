@@ -298,6 +298,108 @@
     {
       "name": "New Request",
       "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/gigs/delete/edd0beda-a5ed-4d30-95da-68cc6916b501",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "gigs",
+            "delete",
+            "edd0beda-a5ed-4d30-95da-68cc6916b501"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E1",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"aspect\": \"Quality of work\",\r\n  \"comment\": \"Photos were sharp and well edited\",\r\n  \"stars\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ratings/save?gigId=2abccbe6-4897-4c21-a0a8-434e9c795f3f",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ratings",
+            "save"
+          ],
+          "query": [
+            {
+              "key": "gigId",
+              "value": "2abccbe6-4897-4c21-a0a8-434e9c795f3f"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/ratings/employer/0788456123",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ratings",
+            "employer",
+            "0788456123"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "E3",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/ratings/delete/505a9226-8766-4836-8eb4-2ad0e038a531",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ratings",
+            "delete",
+            "505a9226-8766-4836-8eb4-2ad0e038a531"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
         "method": "GET",
         "header": [],
         "url": {
