@@ -19,12 +19,13 @@ import rw.ac.auca.gigcampus.repository.StudentRepository;
 
 @Service
 public class GigService {
+
     private final GigRepository gigs;
     private final EmployerRepository employers;
     private final StudentRepository students;
     private final RatingRepository ratings;
-    public GigService(GigRepository gigs, EmployerRepository employers, StudentRepository students,
-            RatingRepository ratings) {
+
+    public GigService(GigRepository gigs, EmployerRepository employers, StudentRepository students, RatingRepository ratings) {
 
         this.gigs = gigs;
         this.employers = employers;
@@ -49,19 +50,24 @@ public class GigService {
             return "Gig date cannot be in the past";
         }
 
-        Student student = resolveStudent(input.getStudent());
+        Student student =
+                resolveStudent(input.getStudent());
 
         if (student == null) {
             return "The student with that id does not exist";
         }
 
-        Employer employer = resolveEmployer(input.getEmployer());
+        Employer employer =
+                resolveEmployer(input.getEmployer());
 
         if (employer == null) {
             return "The employer with that id does not exist";
         }
 
-        boolean alreadyBooked = gigs.existsByStudent_IdAndGigDateAndStatusNot(student.getId(), input.getGigDate(),
+        boolean alreadyBooked =
+                gigs.existsByStudent_IdAndGigDateAndStatusNot(
+                        student.getId(),
+                        input.getGigDate(),
                         GigStatus.WITHDRAWN);
 
         if (alreadyBooked) {
@@ -91,13 +97,15 @@ public class GigService {
             return "The gig with that id does not exist";
         }
 
-        Student student = resolveStudent(input.getStudent());
+        Student student =
+                resolveStudent(input.getStudent());
 
         if (student == null) {
             return "The student with that id does not exist";
         }
 
-        Employer employer = resolveEmployer(input.getEmployer());
+        Employer employer =
+                resolveEmployer(input.getEmployer());
 
         if (employer == null) {
             return "The employer with that id does not exist";
@@ -137,22 +145,17 @@ public class GigService {
     }
 
     public List<Gig> byStatus(GigStatus status) {
+
         return gigs.findByStatusOrderByGigDateAsc(status);
     }
 
-    public List<Gig> between(
-            LocalDate start,
-            LocalDate end) {
+    public List<Gig> between(LocalDate start, LocalDate end) {
 
-        return gigs.findByGigDateBetweenOrderByGigDateAsc(
-                start,
-                end);
+        return gigs.findByGigDateBetweenOrderByGigDateAsc(start, end);
     }
 
     @Transactional
-    public String changeStatus(
-            UUID id,
-            GigStatus newStatus) {
+    public String changeStatus(UUID id, GigStatus newStatus) {
 
         Optional<Gig> found = gigs.findById(id);
 
@@ -161,21 +164,27 @@ public class GigService {
         }
 
         Gig gig = found.get();
+
         GigStatus currentStatus = gig.getStatus();
 
         boolean allowed = false;
 
         if (currentStatus == GigStatus.OPEN) {
-            allowed = newStatus == GigStatus.ASSIGNED
+
+            allowed =
+                    newStatus == GigStatus.ASSIGNED
                     || newStatus == GigStatus.WITHDRAWN;
         }
 
         if (currentStatus == GigStatus.ASSIGNED) {
-            allowed = newStatus == GigStatus.DELIVERED
+
+            allowed =
+                    newStatus == GigStatus.DELIVERED
                     || newStatus == GigStatus.WITHDRAWN;
         }
 
         if (!allowed) {
+
             return "Cannot change status from "
                     + currentStatus
                     + " to "
@@ -183,28 +192,56 @@ public class GigService {
         }
 
         gig.setStatus(newStatus);
+
         gigs.save(gig);
 
         return "Gig status updated successfully";
     }
 
-    private Student resolveStudent(Student input) {
+    public List<Object[]> statsByStatus() {
 
-        if (input == null || input.getId() == null) {
-            return null;
-        }
-
-        return students.findById(
-                input.getId()).orElse(null);
+        return gigs.countGigsByStatus();
     }
 
-    private Employer resolveEmployer(Employer input) {
+    @Transactional
+    public String cancelDay(
+            UUID studentId,
+            LocalDate date) {
 
-        if (input == null || input.getId() == null) {
+        int numberCancelled =
+                gigs.cancelStudentDay(
+                        studentId,
+                        date);
+
+        return numberCancelled
+                + " gigs cancelled";
+    }
+
+    private Student resolveStudent(
+            Student input) {
+
+        if (input == null
+                || input.getId() == null) {
+
             return null;
         }
 
-        return employers.findById(
-                input.getId()).orElse(null);
+        return students
+                .findById(input.getId())
+                .orElse(null);
+    }
+
+    private Employer resolveEmployer(
+            Employer input) {
+
+        if (input == null
+                || input.getId() == null) {
+
+            return null;
+        }
+
+        return employers
+                .findById(input.getId())
+                .orElse(null);
     }
 }
