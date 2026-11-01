@@ -1,5 +1,6 @@
 package rw.ac.auca.gigcampus.controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import rw.ac.auca.gigcampus.domain.Gig;
+import rw.ac.auca.gigcampus.domain.GigStatus;
 import rw.ac.auca.gigcampus.service.GigService;
 
 @RestController
@@ -73,4 +75,22 @@ public class GigController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/by-status")
+public ResponseEntity<?> byStatus(
+        @RequestParam GigStatus status) {
+
+    return ResponseEntity.ok(service.byStatus(status));
+}
+@GetMapping("/between")
+public ResponseEntity<?> between(
+        @RequestParam String start,
+        @RequestParam String end) {
+
+    LocalDate startDate = LocalDate.parse(start);
+    LocalDate endDate = LocalDate.parse(end);
+
+    return ResponseEntity.ok(service.between(startDate, endDate));
+}
+
 }

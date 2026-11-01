@@ -69,4 +69,10 @@ public class EmployerService {
 
         return "Employer deleted successfully";
     }
+
+    public List<Employer> byOrganization(String organization) {
+    return employers
+            .findByOrganizationIgnoreCaseOrderByLastNameAsc(
+                    organization);
+}
 }

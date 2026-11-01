@@ -83,4 +83,13 @@ public class EmployerController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/by-organization")
+public ResponseEntity<?> byOrganization(
+        @RequestParam String organization) {
+
+    return ResponseEntity.ok(
+            service.byOrganization(organization));
+}
+
 }

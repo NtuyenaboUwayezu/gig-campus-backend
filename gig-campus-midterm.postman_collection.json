@@ -29,12 +29,12 @@
       "response": []
     },
     {
-      "name": "New Request",
+      "name": "B1",
       "request": {
-        "method": "DELETE",
+        "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/workspaces/delete/0e9f8e21-a3d7-43a4-8feb-4337abd05698",
+          "raw": "http://localhost:8080/api/employers/by-organization?organization=kigali events",
           "protocol": "http",
           "host": [
             "localhost"
@@ -42,21 +42,26 @@
           "port": "8080",
           "path": [
             "api",
-            "workspaces",
-            "delete",
-            "0e9f8e21-a3d7-43a4-8feb-4337abd05698"
+            "employers",
+            "by-organization"
+          ],
+          "query": [
+            {
+              "key": "organization",
+              "value": "kigali events"
+            }
           ]
         }
       },
       "response": []
     },
     {
-      "name": " http://localhost:8080/api/skills/18c85646-ad94-489d-b923-4694bed1c068",
+      "name": "B2",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/skills/18c85646-ad94-489d-b923-4694bed1c068",
+          "raw": "http://localhost:8080/api/gigs/by-status?status=OPEN",
           "protocol": "http",
           "host": [
             "localhost"
@@ -64,20 +69,26 @@
           "port": "8080",
           "path": [
             "api",
-            "skills",
-            "18c85646-ad94-489d-b923-4694bed1c068"
+            "gigs",
+            "by-status"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "OPEN"
+            }
           ]
         }
       },
       "response": []
     },
     {
-      "name": "http://localhost:8080/api/skills/145cf088-b4d3-41f0-be5e-eedc2559c0df",
+      "name": "B3",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/skills/145cf088-b4d3-41f0-be5e-eedc2559c0df",
+          "raw": "http://localhost:8080/api/gigs/between?start=2026-10-01&end=2026-10-31",
           "protocol": "http",
           "host": [
             "localhost"
@@ -85,8 +96,18 @@
           "port": "8080",
           "path": [
             "api",
-            "skills",
-            "145cf088-b4d3-41f0-be5e-eedc2559c0df"
+            "gigs",
+            "between"
+          ],
+          "query": [
+            {
+              "key": "start",
+              "value": "2026-10-01"
+            },
+            {
+              "key": "end",
+              "value": "2026-10-31"
+            }
           ]
         }
       },

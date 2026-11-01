@@ -1,5 +1,6 @@
 package rw.ac.auca.gigcampus.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import rw.ac.auca.gigcampus.domain.Employer;
 import rw.ac.auca.gigcampus.domain.Gig;
+import rw.ac.auca.gigcampus.domain.GigStatus;
 import rw.ac.auca.gigcampus.domain.Student;
 import rw.ac.auca.gigcampus.repository.EmployerRepository;
 import rw.ac.auca.gigcampus.repository.GigRepository;
@@ -96,4 +98,13 @@ public String update(UUID id, Gig input) {
         }
         return employers.findById(input.getId()).orElse(null);
 }
+
+public List<Gig> byStatus(GigStatus status) {
+    return gigs.findByStatusOrderByGigDateAsc(status);
+}
+
+public List<Gig> between(LocalDate start, LocalDate end) {
+    return gigs.findByGigDateBetweenOrderByGigDateAsc(start, end);
+}
+
 }
