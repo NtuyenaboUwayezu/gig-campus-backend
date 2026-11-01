@@ -2,6 +2,7 @@ package rw.ac.auca.gigcampus.repository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,6 @@ public interface WorkspaceRepository
         ORDER BY w.workspaceNumber ASC
         """)
     List<Workspace> findFreeWorkspaces();
+    Optional<Workspace> findByWorkspaceNumber(int workspaceNumber);
+    
 }

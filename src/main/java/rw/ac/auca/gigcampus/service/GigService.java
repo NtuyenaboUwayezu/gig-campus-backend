@@ -35,24 +35,49 @@ public Optional<Gig> one(UUID id) {
     }
 @Transactional
 public String save(Gig input) {
-        Student student = resolveStudent(input.getStudent());
-        if (student == null) {
-            return "The student with that id does not exist";
-        }
-        Employer employer = resolveEmployer(input.getEmployer());
-        if (employer == null) {
-            return "The employer with that id does not exist";
-        }
-        Gig gig = new Gig();
-        gig.setGigDate(input.getGigDate());
-        gig.setStatus(input.getStatus());
-        gig.setTitle(input.getTitle());
-        gig.setBudget(input.getBudget());
-        gig.setEmployer(employer);
-        gig.setStudent(student);
-        gigs.save(gig);
-        return "Gig saved successfully";
+
+    if (input.getGigDate() != null
+            && input.getGigDate().isBefore(LocalDate.now())) {
+
+        return "Gig date cannot be in the past";
     }
+
+    Student student = resolveStudent(input.getStudent());
+
+    if (student == null) {
+        return "The student with that id does not exist";
+    }
+
+    Employer employer = resolveEmployer(input.getEmployer());
+
+    if (employer == null) {
+        return "The employer with that id does not exist";
+    }
+
+    boolean alreadyBooked =
+            gigs.existsByStudent_IdAndGigDateAndStatusNot(
+                    student.getId(),
+                    input.getGigDate(),
+                    GigStatus.WITHDRAWN);
+
+    if (alreadyBooked) {
+        return "Student already has a gig on that date";
+    }
+
+    Gig gig = new Gig();
+
+    gig.setGigDate(input.getGigDate());
+    gig.setStatus(GigStatus.OPEN);
+    gig.setTitle(input.getTitle());
+    gig.setBudget(input.getBudget());
+    gig.setEmployer(employer);
+    gig.setStudent(student);
+
+    gigs.save(gig);
+
+    return "Gig saved successfully";
+}
+
 @Transactional
 public String update(UUID id, Gig input) {
         Optional<Gig> found = gigs.findById(id);
@@ -69,7 +94,6 @@ public String update(UUID id, Gig input) {
         }
         Gig gig = found.get();
         gig.setGigDate(input.getGigDate());
-        gig.setStatus(input.getStatus());
         gig.setTitle(input.getTitle());
         gig.setBudget(input.getBudget());
         gig.setEmployer(employer);
@@ -105,6 +129,43 @@ public List<Gig> byStatus(GigStatus status) {
 
 public List<Gig> between(LocalDate start, LocalDate end) {
     return gigs.findByGigDateBetweenOrderByGigDateAsc(start, end);
+}
+
+@Transactional
+public String changeStatus(UUID id, GigStatus newStatus) {
+
+    Optional<Gig> found = gigs.findById(id);
+
+    if (found.isEmpty()) {
+        return "The gig with that id does not exist";
+    }
+
+    Gig gig = found.get();
+    GigStatus currentStatus = gig.getStatus();
+
+    boolean allowed = false;
+
+    if (currentStatus == GigStatus.OPEN) {
+        allowed = newStatus == GigStatus.ASSIGNED
+                || newStatus == GigStatus.WITHDRAWN;
+    }
+
+    if (currentStatus == GigStatus.ASSIGNED) {
+        allowed = newStatus == GigStatus.DELIVERED
+                || newStatus == GigStatus.WITHDRAWN;
+    }
+
+    if (!allowed) {
+        return "Cannot change status from "
+                + currentStatus
+                + " to "
+                + newStatus;
+    }
+
+    gig.setStatus(newStatus);
+    gigs.save(gig);
+
+    return "Gig status updated successfully";
 }
 
 }

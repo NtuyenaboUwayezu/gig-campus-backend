@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import rw.ac.auca.gigcampus.domain.Student;
+import rw.ac.auca.gigcampus.domain.Workspace;
 
 public interface StudentRepository
         extends JpaRepository<Student, UUID> {
@@ -21,4 +22,5 @@ public interface StudentRepository
         """)
     List<Student> findBySkillName(
             @Param("name") String name);
+    boolean existsByWorkspace(Workspace workspace);
 }

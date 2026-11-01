@@ -98,4 +98,66 @@ public List<Student> bySkill(String name) {
     return students.findBySkillName(name);
 }
 
+@Transactional
+public String addSkill(UUID studentId, UUID skillId) {
+
+    Optional<Student> studentFound = students.findById(studentId);
+
+    if (studentFound.isEmpty()) {
+        return "The student with that id does not exist";
+    }
+
+    Optional<Skill> skillFound = skills.findById(skillId);
+
+    if (skillFound.isEmpty()) {
+        return "That skill does not exist";
+    }
+
+    Student student = studentFound.get();
+    Skill skill = skillFound.get();
+
+    if (student.getSkills().contains(skill)) {
+        return "The student already has that skill";
+    }
+
+    student.getSkills().add(skill);
+    students.save(student);
+
+    return "Skill added to the student";
+}
+
+@Transactional
+public String changeWorkspace(
+        UUID studentId,
+        int workspaceNumber) {
+
+    Optional<Student> studentFound =
+            students.findById(studentId);
+
+    if (studentFound.isEmpty()) {
+        return "The student with that id does not exist";
+    }
+
+    Optional<Workspace> workspaceFound =
+            workspaces.findByWorkspaceNumber(
+                    workspaceNumber);
+
+    if (workspaceFound.isEmpty()) {
+        return "The workspace with that workspaceNumber does not exist";
+    }
+
+    Workspace workspace = workspaceFound.get();
+
+    if (students.existsByWorkspace(workspace)) {
+        return "That workspace is taken by another student";
+    }
+
+    Student student = studentFound.get();
+
+    student.setWorkspace(workspace);
+    students.save(student);
+
+    return "Workspace changed successfully";
+}
+
 }

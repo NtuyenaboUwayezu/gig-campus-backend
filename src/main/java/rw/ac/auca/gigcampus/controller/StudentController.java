@@ -72,5 +72,54 @@ public ResponseEntity<?> bySkill(
             service.bySkill(name));
 }
 
+@PutMapping("/{studentId}/skills/{skillId}")
+public ResponseEntity<String> addSkill(
+        @PathVariable UUID studentId,
+        @PathVariable UUID skillId) {
+
+    String result = service.addSkill(studentId, skillId);
+
+    if (result.equals("The student with that id does not exist")
+            || result.equals("That skill does not exist")) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(result);
+    }
+
+    if (result.equals("The student already has that skill")) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(result);
+    }
+
+    return ResponseEntity.ok(result);
+}
+
+@PatchMapping("/{studentId}/workspace")
+public ResponseEntity<String> changeWorkspace(
+        @PathVariable UUID studentId,
+        @RequestParam int workspaceNumber) {
+
+    String result = service.changeWorkspace(studentId, workspaceNumber);
+
+    if (result.equals("The student with that id does not exist")
+            || result.equals("The workspace with that workspaceNumber does not exist")) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(result);
+    }
+
+    if (result.equals("That workspace is taken by another student")) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(result);
+    }
+
+    return ResponseEntity.ok(result);
+}
 
 }

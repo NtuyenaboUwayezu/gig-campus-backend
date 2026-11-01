@@ -8,5 +8,7 @@ import rw.ac.auca.gigcampus.domain.GigStatus;
 public interface GigRepository extends JpaRepository<Gig, UUID> {
     List<Gig> findByStatusOrderByGigDateAsc(GigStatus status);
     List<Gig> findByGigDateBetweenOrderByGigDateAsc(LocalDate start, LocalDate end);
+    boolean existsByStudent_IdAndGigDateAndStatusNot(UUID studentId, LocalDate gigDate, GigStatus status);
+    
 }
 
